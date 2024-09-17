@@ -30,12 +30,13 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 
 func GinHandler(c *gin.Context) {
 	if c.Request.Method != "GET" {
-		c.String(http.StatusMethodNotAllowed, "Method Not Allowed \n")
-	} else {
-		currentTime := time.Now()
-		trucatedTime := truncateToSec(currentTime)
-		c.String(http.StatusMethodNotAllowed, trucatedTime.String())
+		c.String(http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
+		return
 	}
+	currentTime := time.Now()
+	trucatedTime := truncateToSec(currentTime)
+	c.String(http.StatusOK, trucatedTime.String())
+
 }
 
 func GinHome(c *gin.Context) {

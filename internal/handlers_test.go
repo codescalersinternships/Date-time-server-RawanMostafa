@@ -2,7 +2,6 @@ package internal
 
 import (
 	"io"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -23,14 +22,14 @@ func assertEquality(t *testing.T, obj1 any, obj2 any) {
 }
 
 func TestHttpHome(t *testing.T) {
-	req := httptest.NewRequest("GET", "http://localhost:8080/", nil)
+	req := httptest.NewRequest("GET", "/", nil)
 
 	w := httptest.NewRecorder()
 	HttpHome(w, req)
 	resp := w.Result()
 	resBody, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("Error reading response body %v", err)
+		t.Errorf("Error reading response body %v", err)
 	}
 
 	expected := "Welcome to my datetime server!"
@@ -51,14 +50,14 @@ func TestHttpHandler(t *testing.T) {
 		{
 			testcaseName: "correct method and url",
 			method:       "GET",
-			url:          "http://localhost:8080/datetime",
+			url:          "/datetime",
 			statusCode:   200,
 			expected:     truncateToSec(time.Now()).String(),
 		},
 		{
 			testcaseName: "wrong method",
 			method:       "POST",
-			url:          "http://localhost:8080/datetime",
+			url:          "/datetime",
 			statusCode:   405,
 			expected:     http.StatusText(http.StatusMethodNotAllowed) + "\n",
 		},
@@ -74,7 +73,7 @@ func TestHttpHandler(t *testing.T) {
 			resp := w.Result()
 			resBody, err := io.ReadAll(resp.Body)
 			if err != nil {
-				log.Fatalf("Error reading response body %v", err)
+				t.Errorf("Error reading response body %v", err)
 			}
 
 			assertEquality(t, testcase.expected, string(resBody))
@@ -90,14 +89,14 @@ func TestGinHome(t *testing.T) {
 	r := gin.Default()
 	r.GET("/", GinHome)
 
-	req, _ := http.NewRequest("GET", "http://localhost:8083/", nil)
+	req, _ := http.NewRequest("GET", "/", nil)
 	res := httptest.NewRecorder()
 	r.ServeHTTP(res, req)
 
 	expected := "Welcome to my datetime server!"
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		log.Fatalf("Error reading response body %v", err)
+		t.Errorf("Error reading response body %v", err)
 	}
 	assertEquality(t, expected, string(resBody))
 	assertEquality(t, 200, res.Code)
@@ -115,34 +114,41 @@ func TestGinHandler(t *testing.T) {
 		{
 			testcaseName: "correct method and url",
 			method:       "GET",
-			url:          "http://localhost:8083/datetime",
+			url:          "/datetime",
 			statusCode:   200,
 			expected:     truncateToSec(time.Now()).String(),
 		},
 		{
 			testcaseName: "wrong method",
 			method:       "POST",
-			url:          "http://localhost:8083/datetime",
+			url:          "/datetime",
 			statusCode:   405,
-			expected:     http.StatusText(http.StatusMethodNotAllowed) + "\n",
+			expected:     http.StatusText(http.StatusMethodNotAllowed),
 		},
 	}
 
 	for _, testcase := range testcases {
 		t.Run(testcase.testcaseName, func(t *testing.T) {
 
-			req := httptest.NewRequest(testcase.method, testcase.url, nil)
+			r := gin.Default()
+			if testcase.method == "GET" {
 
-			w := httptest.NewRecorder()
-			HttpHandler(w, req)
-			resp := w.Result()
-			resBody, err := io.ReadAll(resp.Body)
-			if err != nil {
-				log.Fatalf("Error reading response body %v", err)
+				r.GET(testcase.url, GinHandler)
+			} else {
+				r.POST(testcase.url, GinHandler)
+
 			}
 
+			req, _ := http.NewRequest(testcase.method, testcase.url, nil)
+			res := httptest.NewRecorder()
+			r.ServeHTTP(res, req)
+
+			resBody, err := io.ReadAll(res.Body)
+			if err != nil {
+				t.Errorf("Error reading response body %v", err)
+			}
 			assertEquality(t, testcase.expected, string(resBody))
-			assertEquality(t, testcase.statusCode, resp.StatusCode)
+			assertEquality(t, testcase.statusCode, res.Code)
 
 		})
 	}
