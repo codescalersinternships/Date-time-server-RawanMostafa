@@ -55,7 +55,7 @@ func TestGetDate(t *testing.T) {
 			req := httptest.NewRequest(testcase.method, testcase.url, nil)
 
 			w := httptest.NewRecorder()
-			GetDate(w, req)
+			HttpHandler(w, req)
 			resp := w.Result()
 			resBody, err := io.ReadAll(resp.Body)
 			if err != nil {
