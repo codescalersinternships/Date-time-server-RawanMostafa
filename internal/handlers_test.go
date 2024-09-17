@@ -20,11 +20,24 @@ func assertEquality(t *testing.T, obj1 any, obj2 any) {
 	}
 }
 
-func TestHome(t *testing.T) {
+func TestHttpHome(t *testing.T) {
+	req := httptest.NewRequest("GET","http://localhost:8080", nil)
 
+	w := httptest.NewRecorder()
+	HttpHome(w, req)
+	resp := w.Result()
+	resBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalf("Error reading response body %v", err)
+	}
+
+	expected := "Welcome to my datetime server!"
+
+	assertEquality(t, expected, string(resBody))
+	assertEquality(t, 200, resp.StatusCode)
 }
 
-func TestGetDate(t *testing.T) {
+func TestHttpHandler(t *testing.T) {
 
 	testcases := []struct {
 		testcaseName string
@@ -36,14 +49,14 @@ func TestGetDate(t *testing.T) {
 		{
 			testcaseName: "correct method and url",
 			method:       "GET",
-			url:          "http://localhost:8080",
+			url:          "http://localhost:8080/datetime",
 			statusCode:   200,
 			expected:     truncateToSec(time.Now()).String(),
 		},
 		{
 			testcaseName: "wrong method",
 			method:       "POST",
-			url:          "http://localhost:8080",
+			url:          "http://localhost:8080/datetime",
 			statusCode:   405,
 			expected:     http.StatusText(http.StatusMethodNotAllowed) + "\n",
 		},
@@ -69,3 +82,4 @@ func TestGetDate(t *testing.T) {
 	}
 
 }
+
