@@ -17,7 +17,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetDate(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+	} else {
 		currentTime := time.Now()
 		trucatedTime := truncateToSec(currentTime)
 		fmt.Fprint(w, trucatedTime.String())
