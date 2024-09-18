@@ -1,4 +1,4 @@
-package internal
+package pkg
 
 import (
 	"fmt"
@@ -42,3 +42,4 @@ func GinHandler(c *gin.Context) {
 func GinHome(c *gin.Context) {
 	c.String(http.StatusOK, "Welcome to my datetime server!")
 }
+

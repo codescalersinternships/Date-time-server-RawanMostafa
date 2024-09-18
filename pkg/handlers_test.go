@@ -1,4 +1,4 @@
-package internal
+package pkg
 
 import (
 	"io"
@@ -139,7 +139,10 @@ func TestGinHandler(t *testing.T) {
 
 			}
 
-			req, _ := http.NewRequest(testcase.method, testcase.url, nil)
+			req, err := http.NewRequest(testcase.method, testcase.url, nil)
+			if err != nil {
+				t.Errorf("Error in new request %v", err)
+			}
 			res := httptest.NewRecorder()
 			r.ServeHTTP(res, req)
 

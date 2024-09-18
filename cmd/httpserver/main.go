@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	internal "github.com/codescalersinternships/Datetime-server-RawanMostafa/internal"
+
+	pkg "github.com/codescalersinternships/Datetime-server-RawanMostafa/pkg"
 )
 
 func main() {
 	fmt.Println("Starting our simple http server.")
 
-	http.HandleFunc("/", internal.HttpHome)
-	http.HandleFunc("/datetime", internal.HttpHandler)
+	http.HandleFunc("/", pkg.HttpHome)
+	http.HandleFunc("/datetime", pkg.HttpHandler)
 
-	fmt.Println("Started on port", internal.PortNum)
+	fmt.Println("Started on port", pkg.PortNum)
 
-	err := http.ListenAndServe(internal.PortNum, nil)
+	err := http.ListenAndServe(pkg.PortNum, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
