@@ -57,7 +57,16 @@ func GinHandler(c *gin.Context) {
 	}
 	currentTime := time.Now()
 	trucatedTime := truncateToSec(currentTime)
-	c.String(http.StatusOK, trucatedTime.String())
+
+	if strings.Contains(c.Request.Header.Get("content-type"), "text/plain") {
+		c.Writer.Header().Set("Content-Type", "text/plain")
+		c.String(http.StatusOK, trucatedTime.String())
+
+	} else if strings.Contains(c.Request.Header.Get("content-type"), "json") {
+
+		c.JSON(http.StatusOK, trucatedTime)
+	}
+
 }
 
 func GinHome(c *gin.Context) {
