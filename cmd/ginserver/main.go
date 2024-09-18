@@ -9,7 +9,7 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/",pkg.GinHome)
+	r.GET("/", pkg.GinHome)
 	r.GET("/datetime", pkg.GinHandler)
 	err := r.Run(":8083")
 	if err != nil {

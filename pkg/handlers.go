@@ -42,7 +42,10 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("error converting to json: %v", err)
 		}
-		w.Write(timeJson)
+		_, err = w.Write(timeJson)
+		if err != nil {
+			log.Fatalf("error writing data to response: %v", err)
+		}
 	}
 
 }
