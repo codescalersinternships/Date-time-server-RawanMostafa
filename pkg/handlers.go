@@ -1,8 +1,11 @@
 package pkg
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,11 +24,27 @@ func HttpHome(w http.ResponseWriter, r *http.Request) {
 func HttpHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-	} else {
-		currentTime := time.Now()
-		trucatedTime := truncateToSec(currentTime)
-		fmt.Fprint(w, trucatedTime.String())
+		return
 	}
+	currentTime := time.Now()
+	trucatedTime := truncateToSec(currentTime)
+
+	if strings.Contains(r.Header.Get("content-type"), "text/plain") {
+
+		w.Header().Set("Content-Type", "text/plain")
+		fmt.Fprint(w, trucatedTime.String())
+
+	} else if strings.Contains(r.Header.Get("content-type"), "json") {
+
+		w.Header().Set("Content-Type", "application/json")
+
+		timeJson, err := json.Marshal(trucatedTime)
+		if err != nil {
+			log.Fatalf("error converting to json: %v", err)
+		}
+		w.Write(timeJson)
+	}
+
 }
 
 func GinHandler(c *gin.Context) {
@@ -36,10 +55,8 @@ func GinHandler(c *gin.Context) {
 	currentTime := time.Now()
 	trucatedTime := truncateToSec(currentTime)
 	c.String(http.StatusOK, trucatedTime.String())
-
 }
 
 func GinHome(c *gin.Context) {
 	c.String(http.StatusOK, "Welcome to my datetime server!")
 }
-

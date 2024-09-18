@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -39,20 +40,34 @@ func TestHttpHome(t *testing.T) {
 }
 
 func TestHttpHandler(t *testing.T) {
-
+	truncatedTime := truncateToSec(time.Now())
+	timeJson, err := json.Marshal(truncatedTime)
+	if err != nil {
+		t.Errorf("error converting to json: %v", err)
+	}
 	testcases := []struct {
 		testcaseName string
 		method       string
 		url          string
 		statusCode   int
-		expected     string
+		expected     any
+		contentType  string
 	}{
 		{
-			testcaseName: "correct method and url",
+			testcaseName: "correct method and url, plain text type",
 			method:       "GET",
 			url:          "/datetime",
 			statusCode:   200,
-			expected:     truncateToSec(time.Now()).String(),
+			expected:     truncatedTime.String(),
+			contentType:  "text/plain",
+		},
+		{
+			testcaseName: "correct method and url, json type",
+			method:       "GET",
+			url:          "/datetime",
+			statusCode:   200,
+			expected:     timeJson,
+			contentType:  "application/json",
 		},
 		{
 			testcaseName: "wrong method",
@@ -67,6 +82,7 @@ func TestHttpHandler(t *testing.T) {
 		t.Run(testcase.testcaseName, func(t *testing.T) {
 
 			req := httptest.NewRequest(testcase.method, testcase.url, nil)
+			req.Header.Add("content-type", testcase.contentType)
 
 			w := httptest.NewRecorder()
 			HttpHandler(w, req)
@@ -75,8 +91,11 @@ func TestHttpHandler(t *testing.T) {
 			if err != nil {
 				t.Errorf("Error reading response body %v", err)
 			}
-
-			assertEquality(t, testcase.expected, string(resBody))
+			if testcase.contentType == "application/json" {
+				assertEquality(t, testcase.expected, resBody)
+			} else {
+				assertEquality(t, testcase.expected, string(resBody))
+			}
 			assertEquality(t, testcase.statusCode, resp.StatusCode)
 
 		})
