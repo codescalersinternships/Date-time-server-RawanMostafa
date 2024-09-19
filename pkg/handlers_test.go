@@ -161,6 +161,14 @@ func TestGinHandler(t *testing.T) {
 			contentType:  "application/json",
 		},
 		{
+			testcaseName: "unsupported content type",
+			method:       "GET",
+			url:          "/datetime",
+			statusCode:   http.StatusUnsupportedMediaType,
+			expected:     http.StatusText(http.StatusUnsupportedMediaType) ,
+			contentType:  "text/javascript; charset=utf-8",
+		},
+		{
 			testcaseName: "wrong method",
 			method:       "POST",
 			url:          "/datetime",
