@@ -40,8 +40,8 @@ func TestHttpHome(t *testing.T) {
 }
 
 func TestHttpHandler(t *testing.T) {
-	truncatedTime := truncateToSec(time.Now())
-	timeJson, err := json.Marshal(truncatedTime)
+	formattedTime := time.Now().Format("2024/09/19 12:57:04")
+	timeJson, err := json.Marshal(formattedTime)
 	if err != nil {
 		t.Errorf("error converting to json: %v", err)
 	}
@@ -57,23 +57,31 @@ func TestHttpHandler(t *testing.T) {
 			testcaseName: "correct method and url, plain text type",
 			method:       "GET",
 			url:          "/datetime",
-			statusCode:   200,
-			expected:     truncatedTime.String(),
+			statusCode:   http.StatusOK,
+			expected:     formattedTime,
 			contentType:  "text/plain",
 		},
 		{
 			testcaseName: "correct method and url, json type",
 			method:       "GET",
 			url:          "/datetime",
-			statusCode:   200,
+			statusCode:   http.StatusOK,
 			expected:     timeJson,
 			contentType:  "application/json",
+		},
+		{
+			testcaseName: "unsupported content type",
+			method:       "GET",
+			url:          "/datetime",
+			statusCode:   http.StatusUnsupportedMediaType,
+			expected:     http.StatusText(http.StatusUnsupportedMediaType) + "\n",
+			contentType:  "text/javascript; charset=utf-8",
 		},
 		{
 			testcaseName: "wrong method",
 			method:       "POST",
 			url:          "/datetime",
-			statusCode:   405,
+			statusCode:   http.StatusMethodNotAllowed,
 			expected:     http.StatusText(http.StatusMethodNotAllowed) + "\n",
 		},
 	}
@@ -123,8 +131,8 @@ func TestGinHome(t *testing.T) {
 
 func TestGinHandler(t *testing.T) {
 
-	truncatedTime := truncateToSec(time.Now())
-	timeJson, err := json.Marshal(truncatedTime)
+	formattedTime := time.Now().Format("2024/09/19 12:57:04")
+	timeJson, err := json.Marshal(formattedTime)
 	if err != nil {
 		t.Errorf("error converting to json: %v", err)
 	}
@@ -141,7 +149,7 @@ func TestGinHandler(t *testing.T) {
 			method:       "GET",
 			url:          "/datetime",
 			statusCode:   200,
-			expected:     truncatedTime.String(),
+			expected:     formattedTime,
 			contentType:  "text/plain",
 		},
 		{

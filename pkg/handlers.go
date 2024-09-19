@@ -13,10 +13,6 @@ import (
 
 const PortNum string = ":8080"
 
-func truncateToSec(t time.Time) time.Time {
-	return time.Date(t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), 0, t.Location())
-}
-
 func HttpHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to my datetime server!")
 }
@@ -27,18 +23,18 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	currentTime := time.Now()
-	trucatedTime := truncateToSec(currentTime)
+	formattedTime := currentTime.Format("2024/09/19 12:57:04")
 
 	if strings.Contains(r.Header.Get("content-type"), "text/plain") {
 
 		w.Header().Set("Content-Type", "text/plain")
-		fmt.Fprint(w, trucatedTime.String())
+		fmt.Fprint(w, formattedTime)
 
-	} else if strings.Contains(r.Header.Get("content-type"), "json") {
+	} else if strings.Contains(r.Header.Get("content-type"), "application/json") {
 
 		w.Header().Set("Content-Type", "application/json")
 
-		timeJson, err := json.Marshal(trucatedTime)
+		timeJson, err := json.Marshal(formattedTime)
 		if err != nil {
 			log.Fatalf("error converting to json: %v", err)
 		}
@@ -46,6 +42,8 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("error writing data to response: %v", err)
 		}
+	} else {
+		http.Error(w, http.StatusText(http.StatusUnsupportedMediaType), http.StatusUnsupportedMediaType)
 	}
 
 }
@@ -56,15 +54,17 @@ func GinHandler(c *gin.Context) {
 		return
 	}
 	currentTime := time.Now()
-	trucatedTime := truncateToSec(currentTime)
+	formattedTime := currentTime.Format("2024/09/19 12:57:04")
 
 	if strings.Contains(c.Request.Header.Get("content-type"), "text/plain") {
 		c.Writer.Header().Set("Content-Type", "text/plain")
-		c.String(http.StatusOK, trucatedTime.String())
+		c.String(http.StatusOK, formattedTime)
 
-	} else if strings.Contains(c.Request.Header.Get("content-type"), "json") {
+	} else if strings.Contains(c.Request.Header.Get("content-type"), "application/json") {
 
-		c.JSON(http.StatusOK, trucatedTime)
+		c.JSON(http.StatusOK, formattedTime)
+	} else {
+		c.String(http.StatusUnsupportedMediaType, http.StatusText(http.StatusUnsupportedMediaType))
 	}
 
 }
