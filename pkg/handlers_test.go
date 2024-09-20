@@ -40,7 +40,7 @@ func TestHttpHome(t *testing.T) {
 }
 
 func TestHttpHandler(t *testing.T) {
-	formattedTime := time.Now().Format("2024/09/19 12:57:04")
+	formattedTime := time.Now().Format(time.ANSIC)
 	timeJson, err := json.Marshal(formattedTime)
 	if err != nil {
 		t.Errorf("error converting to json: %v", err)
@@ -131,7 +131,7 @@ func TestGinHome(t *testing.T) {
 
 func TestGinHandler(t *testing.T) {
 
-	formattedTime := time.Now().Format("2024/09/19 12:57:04")
+	formattedTime := time.Now().Format(time.ANSIC)
 	timeJson, err := json.Marshal(formattedTime)
 	if err != nil {
 		t.Errorf("error converting to json: %v", err)

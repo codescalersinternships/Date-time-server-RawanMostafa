@@ -23,7 +23,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	currentTime := time.Now()
-	formattedTime := currentTime.Format("2024/09/19 12:57:04")
+	formattedTime := currentTime.Format(time.ANSIC)
 
 	if strings.Contains(r.Header.Get("content-type"), "text/plain") {
 
@@ -54,7 +54,7 @@ func GinHandler(c *gin.Context) {
 		return
 	}
 	currentTime := time.Now()
-	formattedTime := currentTime.Format("2024/09/19 12:57:04")
+	formattedTime := currentTime.Format(time.ANSIC)
 
 	if strings.Contains(c.Request.Header.Get("content-type"), "text/plain") {
 		c.Writer.Header().Set("Content-Type", "text/plain")
