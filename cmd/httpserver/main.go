@@ -14,9 +14,9 @@ func main() {
 	http.HandleFunc("/", pkg.HttpHome)
 	http.HandleFunc("/datetime", pkg.HttpHandler)
 
-	fmt.Println("Started on port", pkg.PortNum)
+	fmt.Println("Started on port", ":8080")
 
-	err := http.ListenAndServe(pkg.PortNum, nil)
+	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

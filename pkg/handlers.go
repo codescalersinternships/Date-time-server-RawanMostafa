@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const PortNum string = ":8080"
+
 
 func HttpHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to my datetime server!")
