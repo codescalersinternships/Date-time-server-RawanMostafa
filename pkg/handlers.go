@@ -11,8 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
 func HttpHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to my datetime server!")
 }

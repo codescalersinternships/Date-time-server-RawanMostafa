@@ -165,7 +165,7 @@ func TestGinHandler(t *testing.T) {
 			method:       "GET",
 			url:          "/datetime",
 			statusCode:   http.StatusUnsupportedMediaType,
-			expected:     http.StatusText(http.StatusUnsupportedMediaType) ,
+			expected:     http.StatusText(http.StatusUnsupportedMediaType),
 			contentType:  "text/javascript; charset=utf-8",
 		},
 		{
