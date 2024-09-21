@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  app1:
+    build:
+      context: .
+      dockerfile: Dockerfile.http
+    ports:
+      - "8080:8080" 
+
+  app2:
+    build:
+      context: .
+      dockerfile: Dockerfile.gin
+    ports:
+      - "8083:8083" 
