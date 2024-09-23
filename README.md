@@ -13,7 +13,7 @@ This repository implements http and Gin datetime servers.
 1. Clone the repository
 
    ```bash
-   git clone github.com/codescalersinternships/Datetime-server-RawanMostafa/pkg
+   git clone https://github.com/codescalersinternships/Datetime-server-RawanMostafa.git
    ```
 
 2. Install the dependencies
