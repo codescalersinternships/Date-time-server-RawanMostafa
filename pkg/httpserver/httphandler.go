@@ -1,4 +1,4 @@
-package pkg
+package httphandler
 
 import (
 	"encoding/json"
@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func HttpHome(w http.ResponseWriter, r *http.Request) {
@@ -44,29 +42,4 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusUnsupportedMediaType), http.StatusUnsupportedMediaType)
 	}
 
-}
-
-func GinHandler(c *gin.Context) {
-	if c.Request.Method != "GET" {
-		c.String(http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
-		return
-	}
-	currentTime := time.Now()
-	formattedTime := currentTime.Format(time.ANSIC)
-
-	if strings.Contains(c.Request.Header.Get("content-type"), "text/plain") {
-		c.Writer.Header().Set("Content-Type", "text/plain")
-		c.String(http.StatusOK, formattedTime)
-
-	} else if strings.Contains(c.Request.Header.Get("content-type"), "application/json") {
-
-		c.JSON(http.StatusOK, formattedTime)
-	} else {
-		c.String(http.StatusUnsupportedMediaType, http.StatusText(http.StatusUnsupportedMediaType))
-	}
-
-}
-
-func GinHome(c *gin.Context) {
-	c.String(http.StatusOK, "Welcome to my datetime server!")
 }

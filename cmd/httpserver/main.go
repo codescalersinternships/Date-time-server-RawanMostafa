@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/codescalersinternships/Datetime-server-RawanMostafa/pkg"
+	httphandler "github.com/codescalersinternships/Datetime-server-RawanMostafa/pkg/httpserver"
 )
-
 
 const defaultPort = "8083"
 
@@ -42,8 +41,8 @@ func main() {
 
 	fmt.Println("Starting our simple http server.")
 
-	http.HandleFunc("/", pkg.HttpHome)
-	http.HandleFunc("/datetime", pkg.HttpHandler)
+	http.HandleFunc("/", httphandler.HttpHome)
+	http.HandleFunc("/datetime", httphandler.HttpHandler)
 
 	fmt.Printf("Started on port :%s\n", port)
 
