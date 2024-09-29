@@ -30,11 +30,6 @@ This repository implements http and Gin datetime servers.
   ```bash
     make all
   ```
- To run a specific make target
-   
-   ```bash
-    make <target_name>
-   ```
 
 ### 2. Using docker-compose
 
