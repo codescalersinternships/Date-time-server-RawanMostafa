@@ -10,8 +10,7 @@ import (
 	"github.com/codescalersinternships/Datetime-server-RawanMostafa/pkg"
 )
 
-const defaltBaseUrl = "http://localhost"
-const defaultEndpoint = "/datetime"
+
 const defaultPort = "8083"
 
 func getFlags() string {
