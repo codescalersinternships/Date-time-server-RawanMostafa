@@ -37,6 +37,14 @@ This repository implements http and Gin datetime servers.
   ```bash
     docker-compose up
   ```
+
+### 2. Using kubernetes deployed server
+
+   
+  ```bash
+    curl http://185.206.122.17:30100/
+  ```
+
 ### 3. Using main.go
    
   ```bash
