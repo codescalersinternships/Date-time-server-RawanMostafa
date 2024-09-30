@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"testing"
 	"time"
-
 )
 
 func assertEquality(t *testing.T, obj1 any, obj2 any) {
@@ -109,4 +108,3 @@ func TestHttpHandler(t *testing.T) {
 	}
 
 }
-

@@ -13,8 +13,7 @@ func GinHandler(c *gin.Context) {
 		c.String(http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
 		return
 	}
-	currentTime := time.Now()
-	formattedTime := currentTime.Format(time.ANSIC)
+	formattedTime := time.Now().Format(time.ANSIC)
 
 	if strings.Contains(c.Request.Header.Get("content-type"), "text/plain") {
 		c.Writer.Header().Set("Content-Type", "text/plain")

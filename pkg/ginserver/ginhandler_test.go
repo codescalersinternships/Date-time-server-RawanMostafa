@@ -22,9 +22,6 @@ func assertEquality(t *testing.T, obj1 any, obj2 any) {
 	}
 }
 
-
-
-
 func TestGinHome(t *testing.T) {
 
 	r := gin.Default()

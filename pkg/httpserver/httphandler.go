@@ -18,8 +18,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
-	currentTime := time.Now()
-	formattedTime := currentTime.Format(time.ANSIC)
+	formattedTime := time.Now().Format(time.ANSIC)
 
 	if strings.Contains(r.Header.Get("content-type"), "text/plain") {
 
