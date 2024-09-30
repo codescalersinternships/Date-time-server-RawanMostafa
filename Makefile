@@ -3,7 +3,7 @@ build:
 	go build -o ginout ./cmd/ginserver/main.go
 
 format:
-	go fmt github.com/codescalersinternships/Datetime-server-RawanMostafa/...
+	go fmt ./...
 
 lint:
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.60.3
