@@ -10,4 +10,4 @@ spec:
     - protocol: TCP
       port: 8083
       targetPort: 8080
-      nodePort: 30200
+      nodePort: 30400
