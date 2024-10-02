@@ -1,0 +1,10 @@
+ginAppName: gin-server
+httpAppName: http-server
+
+ginImage:
+  name: rawanmostafa/ginserver
+  tag: latest
+
+httpImage:
+  name: rawanmostafa/httpserver
+  tag: latest

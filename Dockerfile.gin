@@ -1,0 +1,17 @@
+FROM golang:latest AS builder
+
+WORKDIR /build
+
+COPY . .
+
+RUN go mod download
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o ginout ./cmd/ginserver/main.go
+
+EXPOSE 8083
+
+FROM scratch
+WORKDIR /app
+COPY --from=builder /build/ginout .
+
+ENTRYPOINT [ "/app/ginout" ]

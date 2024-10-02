@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-deployment
+  labels:
+    app: {{ .Values.ginAppName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.ginAppName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.ginAppName }}
+    spec:
+      containers:
+      - name: {{ .Values.ginAppName }}
+        image: "{{ .Values.ginImage.name }}:{{ .Values.ginImage.tag }}"
+        ports:
+        - containerPort: 8083

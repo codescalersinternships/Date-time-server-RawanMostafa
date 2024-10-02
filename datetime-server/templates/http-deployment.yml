@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-deployment
+  labels:
+    app: {{ .Values.httpAppName }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.httpAppName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.httpAppName }}
+    spec:
+      containers:
+      - name: {{ .Values.httpAppName }}
+        image: "{{ .Values.httpImage.name }}:{{ .Values.httpImage.tag }}"
+        ports:
+        - containerPort: 8080
+        
