@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: http-deployment
   labels:
-    app: http-server
+    app: {{ .Values.httpAppName }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: http-server
+      app: {{ .Values.httpAppName }}
   template:
     metadata:
       labels:
-        app: http-server
+        app: {{ .Values.httpAppName }}
     spec:
       containers:
-      - name: http-server
-        image: rawanmostafa/httpserver:latest
+      - name: {{ .Values.httpAppName }}
+        image: "{{ .Values.httpImage.name }}:{{ .Values.httpImage.tag }}"
         ports:
         - containerPort: 8080
         
